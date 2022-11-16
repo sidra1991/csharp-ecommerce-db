@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -57,6 +58,7 @@ Customer LoginCustomer(){
 			if(item.Name == login || item.Id == loginInt)
 			{
 				client = item;
+				break;
 			}
 		}
 		if( client != null)
@@ -87,6 +89,7 @@ Customer createCustomer()
     return customer;
 
 }
+
 
 void Menu()
 {
@@ -120,19 +123,73 @@ void Menu()
     }
 }
 
-void buyProduct()
+void buyProduct(Customer customer)
 {
-	Console.WriteLine("vuoi vedere la lista dei prodotti disponibili?");
+	Console.WriteLine("ciao " + customer.Name + " con id numero " + customer.Id);
+	Order order = new Order();
+	List<Product> products = new List<Product>();
+    foreach (Product item in Db.Products)
+	{
+		products.Add(item);
+	}
+	Console.WriteLine();
+    Console.WriteLine("quanti prodotti vuoi comprare?");
+	int manyBuy = Select();
+	for (int i = 0; i < manyBuy; i++)
+	{
+		Console.WriteLine("vuoi vedere la lista dei prodotti?");
+        if (yesOrNot())
+        {
+            foreach (Product item in products)
+            {
+                Console.WriteLine(item.Id + " " + item.Prince + " " + item.Description);
+            }
+        }
+		Console.WriteLine("inserire l'iD del prodotto");
+		 int select = Select();
+		order.Products =new List<Product>();
+		order.Products.Add(products[select]);
 
+    }
+	double ammount = 0;
+
+	for (int i = 0; i < order.Products.Count; i++)
+	{
+		ammount += order.Products[i].Prince;
+	}
+    order.Date = DateTime.Now;
+	order.CustomerId = customer.Id;
+	order.Amount = ammount;
+    Db.Orders.Add(order);
+	Payment paymnt = new Payment();
+	Console.WriteLine("pagare subito?");
 	if (yesOrNot())
 	{
-		foreach (Product item in Db.Products)
-		{
-			Console.WriteLine(item.Id + " " + item.Prince + " " + item.Description);
-		}
+		Console.WriteLine("inserire dati carta di credito");
+		Console.ReadLine();
+		paymnt.Status = true;
 	}
+	else
+	{
+        paymnt.Status = true;
+    }
+	paymnt.date=DateTime.Now;
+	paymnt.Amount=ammount;
+	paymnt.OrderID = order.Id;
+	paymnt.Orders = order;
+	order.Payments = new List<Payment>();
+	order.Payments.Add(paymnt);
+    Db.Payments.Add(paymnt);
+	customer.Orders.Add(order);
+	try
+	{
+		Db.SaveChanges();
+	}
+	catch (Exception ex)
+	{
 
-
+		Console.WriteLine(ex.Message);
+	}
 }
 
 
@@ -144,7 +201,7 @@ void MenuClient(Customer customer){
     switch (Select())
 	{
 		case 1:
-            buyProduct();
+            buyProduct(customer);
 			break;
 		default:
 			MenuClient(customer);
