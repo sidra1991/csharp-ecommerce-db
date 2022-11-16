@@ -2,6 +2,7 @@
 public class Order
 {
     public List<Payment>? Payments { get; set; }
+
     public int Id { get; set; }
     public DateTime Date { get; set; }
     public Double Amount { get; set; }

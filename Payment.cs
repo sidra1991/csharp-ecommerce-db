@@ -2,7 +2,7 @@
 public class Payment
 {
     public int Id { set; get; }
-    public DateTime date { get; set; }
+    public DateTime? date { get; set; }
     public double Amount { set; get; }
     public bool Status { get; set; }
 
