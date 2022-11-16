@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-class Payment
+public class Payment
 {
     public int Id { set; get; }
     public DateTime date { get; set; }

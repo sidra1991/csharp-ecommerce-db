@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-class Employee
+public class Employee
 {
     public int Id { set; get; }
     public string Name { get; set; }

@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-class Order
+public class Order
 {
     public List<Payment> Payments { get; set; }
     public int Id { get; set; }

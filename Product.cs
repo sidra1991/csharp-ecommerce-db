@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-class Product
+public class Product
 {
     public int Id { set; get; }
     public string Description { get; set; }
